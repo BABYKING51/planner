@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>منظّم وقتي</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f5f6fb;--card:#fff;--tx:#1d2033;--mu:#7a7f99;--ac:#6d5efc;--ac2:#eeebff;--bd:#e5e7f2;--ok:#22b07d;--hi:#ef5b6b;--md:#f5a524;--lo:#4f9cf9;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12131c;--card:#1b1d2b;--tx:#eceefb;--mu:#8e93b0;--ac:#8c80ff;--ac2:#2a2848;--bd:#2a2d42;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12131c;--card:#1b1d2b;--tx:#eceefb;--mu:#8e93b0;--ac:#8c80ff;--ac2:#2a2848;--bd:#2a2d42;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:Tajawal,Tahoma,"Segoe UI",sans-serif;line-height:1.6}
+.w{max-width:980px;margin:auto;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+h1{font-size:26px;margin:0}
+.sub{color:var(--mu);font-size:14px}
+.pill{background:var(--ac2);color:var(--ac);padding:6px 14px;border-radius:99px;font-weight:700;font-size:14px}
+.tabs,.days{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px}
+.tabs button,.days button{border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;padding:8px 16px;border-radius:12px;cursor:pointer;white-space:nowrap}
+.tabs button.on,.days button.on{background:var(--ac);color:#fff;border-color:var(--ac);font-weight:700}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:10px}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:12px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer}
+.btn.g{background:var(--ac2);color:var(--ac)}.btn.d{background:#fde8ea;color:var(--hi)}
+.bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:8px}
+.row{display:flex;gap:12px;border-top:1px solid var(--bd);padding:8px 0;min-height:52px}
+.row:first-child{border-top:0}
+.hr{width:54px;color:var(--mu);font-size:13px;padding-top:4px;flex:none}
+.cells{flex:1;display:flex;flex-direction:column;gap:6px}
+.blk{display:flex;align-items:center;gap:10px;border-radius:10px;padding:6px 12px;cursor:pointer;border-inline-start:5px solid var(--ac);background:var(--ac2)}
+.blk small{color:var(--mu);display:block}
+.add{align-self:flex-start;border:1px dashed var(--bd);background:none;color:var(--mu);border-radius:8px;padding:0 10px;cursor:pointer;font:inherit}
+.task{display:flex;gap:10px;align-items:center}
+.task input[type=checkbox]{width:22px;height:22px;accent-color:var(--ok);flex:none}
+.task .t{flex:1;cursor:pointer}.task.done .t b{text-decoration:line-through;color:var(--mu)}
+.st{font-size:22px;flex:none;line-height:1;order:99}
+.blk>div{flex:1}
+.tag{font-size:12px;color:#fff;border-radius:8px;padding:1px 10px}
+.hi{background:var(--hi)}.md{background:var(--md)}.lo{background:var(--lo)}
+.nt{display:grid;grid-template-columns:200px 1fr;gap:12px}
+.nl button{display:block;width:100%;text-align:start;margin-bottom:6px;border:1px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;border-radius:10px;padding:8px 12px;cursor:pointer}
+.nl button.on{border-color:var(--ac);background:var(--ac2)}
+input,select,textarea{width:100%;font:inherit;color:var(--tx);background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px 12px}
+textarea{min-height:320px;resize:vertical}
+.wk{display:grid;grid-template-columns:repeat(7,minmax(150px,1fr));gap:8px;overflow-x:auto}
+.wk h4{margin:0 0 6px;cursor:pointer;color:var(--ac)}
+.wk .it{font-size:13px;padding:4px 8px;border-radius:8px;background:var(--ac2);margin-bottom:5px}
+.wk .it.t{background:var(--bg);border:1px solid var(--bd)}
+.pg{height:10px;background:var(--bd);border-radius:9px;overflow:hidden;margin:8px 0}
+.pg i{display:block;height:100%;background:var(--ok);transition:width .3s}
+.m{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:16px;z-index:9}
+.m form,.m>div{background:var(--card);border-radius:18px;padding:18px;width:100%;max-width:400px}
+.m label{display:block;font-size:14px;color:var(--mu);margin-top:10px}
+.m .bt{display:flex;gap:8px;margin-top:16px}
+.empty{color:var(--mu);text-align:center;padding:18px}
+@media(max-width:640px){.nt{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="w">
+<header><div><h1>منظّم وقتي</h1><div class="sub" id="sub"></div></div><span class="pill" id="pill"></span></header>
+<div class="tabs" id="tabs"></div>
+<div class="days" id="days"></div>
+<main id="v"></main>
+</div>
+<script>
+const D=["السبت","الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة"];
+const P={h:"عالية",m:"متوسطة",l:"منخفضة"},PC={h:"hi",m:"md",l:"lo"},PO={h:0,m:1,l:2};
+const T=[["day","اليوم"],["tasks","المهام"],["notes","الملاحظات"],["week","الأسبوع"],["goals","الأهداف"]];
+const K="valoria-planner-v1";
+let S={blocks:[],tasks:[],notes:[{id:1,title:"ملاحظة جديدة",body:""}],goals:[]};
+try{const r=localStorage.getItem(K);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+let day=(new Date().getDay()+1)%7,tab="day",nid=S.notes[0]?S.notes[0].id:0;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const id=()=>Date.now()+Math.floor(Math.random()*1000);
+const hr=t=>parseInt((t||"0").split(":")[0])||0;
+const pad=n=>String(n).padStart(2,"0");
+
+function modal(title,fields,val,onSave,onDel){
+ const m=document.createElement("div");m.className="m";
+ const f=fields.map(x=>`<label>${x.l}${x.t=="select"?`<select name="${x.k}">${x.o.map(o=>`<option value="${o[0]}">${o[1]}</option>`).join("")}</select>`:x.t=="area"?`<textarea name="${x.k}" style="min-height:80px"></textarea>`:`<input name="${x.k}" type="${x.t||"text"}">`}</label>`).join("");
+ m.innerHTML=`<form><h3 style="margin:0">${title}</h3>${f}<div class="bt"><button class="btn">حفظ</button><button type="button" class="btn g" data-x>إلغاء</button>${onDel?'<button type="button" class="btn d" data-d>حذف</button>':""}</div></form>`;
+ document.body.appendChild(m);
+ const fm=m.querySelector("form");
+ fields.forEach(x=>{fm.elements[x.k].value=val[x.k]==null?"":val[x.k]});
+ m.querySelector("[data-x]").onclick=()=>m.remove();
+ if(onDel)m.querySelector("[data-d]").onclick=()=>{if(confirm("هل تريد الحذف؟")){onDel();m.remove();save();render()}};
+ fm.onsubmit=e=>{e.preventDefault();const o={};fields.forEach(x=>o[x.k]=fm.elements[x.k].value);onSave(o);m.remove();save();render()};
+ setTimeout(()=>fm.elements[fields[0].k].focus(),50);
+}
+const BF=[{k:"title",l:"اسم النشاط",req:1},{k:"start",l:"وقت البداية",t:"time"},{k:"end",l:"وقت النهاية",t:"time"},{k:"color",l:"اللون",t:"select",o:[["#6d5efc","بنفسجي"],["#22b07d","أخضر"],["#f5a524","برتقالي"],["#ef5b6b","أحمر"],["#4f9cf9","أزرق"]]}];
+function editBlock(b){
+ const nw=!b.id;
+ modal(nw?"نشاط جديد":"تعديل النشاط",BF,b,o=>{if(!o.title.trim())return;if(nw)S.blocks.push(Object.assign({id:id(),day},o));else Object.assign(b,o)},nw?null:()=>S.blocks=S.blocks.filter(x=>x!==b));
+}
+const TF=[{k:"title",l:"اسم المهمة"},{k:"time",l:"الوقت",t:"time"},{k:"prio",l:"الأولوية",t:"select",o:[["h","عالية"],["m","متوسطة"],["l","منخفضة"]]},{k:"details",l:"التفاصيل",t:"area"}];
+function editTask(t){
+ const nw=!t.id;
+ modal(nw?"مهمة جديدة":"تعديل المهمة",TF,t,o=>{if(!o.title.trim())return;if(nw)S.tasks.push(Object.assign({id:id(),day,done:false},o));else Object.assign(t,o)},nw?null:()=>S.tasks=S.tasks.filter(x=>x!==t));
+}
+const GF=[{k:"title",l:"اسم الهدف"},{k:"target",l:"المطلوب (رقم)",t:"number"},{k:"cur",l:"المُنجز حتى الآن",t:"number"},{k:"unit",l:"الوحدة (مثال: كتاب، كم، ساعة)"}];
+function editGoal(g){
+ const nw=!g.id;
+ modal(nw?"هدف جديد":"تعديل الهدف",GF,g,o=>{if(!o.title.trim())return;o.target=+o.target||1;o.cur=+o.cur||0;if(nw)S.goals.push(Object.assign({id:id()},o));else Object.assign(g,o)},nw?null:()=>S.goals=S.goals.filter(x=>x!==g));
+}
+
+function vDay(){
+ const bl=S.blocks.filter(b=>b.day==day);let h="";
+ for(let H=5;H<=23;H++){
+  const c=bl.filter(b=>Math.min(23,Math.max(5,hr(b.start)))==H).sort((a,b)=>(a.start||"").localeCompare(b.start||""));
+  h+=`<div class="row"><div class="hr">${pad(H)}:00</div><div class="cells">${c.map(b=>`<div class="blk" data-b="${b.id}" style="border-color:${esc(b.color)}"><span class="st" data-bd="${b.id}">${b.done?"✅":"❌"}</span><div><b>${esc(b.title)}</b><small>${esc(b.start)} – ${esc(b.end)}</small></div></div>`).join("")}<button class="add" data-a="${H}">+</button></div></div>`;
+ }
+ return `<div class="bar"><b>جدول ${D[day]}</b><button class="btn" data-a="9">+ نشاط</button></div><div class="card">${h}</div>`;
+}
+function tRow(t){return `<div class="card task ${t.done?"done":""}"><span class="st" data-td="${t.id}" style="cursor:pointer">${t.done?"✅":"❌"}</span><div class="t" data-t="${t.id}"><b>${esc(t.title)}</b><div class="sub">${esc(t.time)} ${t.details?"· "+esc(t.details):""}</div></div><span class="tag ${PC[t.prio]}">${P[t.prio]}</span></div>`}
+function vTasks(){
+ const l=S.tasks.filter(t=>t.day==day).sort((a,b)=>a.done-b.done||PO[a.prio]-PO[b.prio]||(a.time||"").localeCompare(b.time||""));
+ return `<div class="bar"><b>مهام ${D[day]}</b><button class="btn" data-nt>+ مهمة</button></div>${l.map(tRow).join("")||'<div class="empty">لا توجد مهام لهذا اليوم</div>'}`;
+}
+function vNotes(){
+ const n=S.notes.find(x=>x.id==nid)||S.notes[0];if(n)nid=n.id;
+ return `<div class="nt"><div class="nl"><button class="btn" style="width:100%;margin-bottom:8px" data-nn>+ ملاحظة</button>${S.notes.map(x=>`<button data-n="${x.id}" class="${x.id==nid?"on":""}">${esc(x.title||"بدون عنوان")}</button>`).join("")}</div>${n?`<div class="card"><input id="ntt" placeholder="العنوان" value="${esc(n.title)}" style="font-weight:700;margin-bottom:8px"><textarea id="ntb" placeholder="اكتب أفكارك هنا… يتم الحفظ تلقائيًا">${esc(n.body)}</textarea><button class="btn d" style="margin-top:8px" data-dn>حذف الملاحظة</button></div>`:'<div class="empty">أنشئ ملاحظة للبدء</div>'}</div>`;
+}
+function vWeek(){
+ return `<div class="wk">${D.map((d,i)=>{
+  const b=S.blocks.filter(x=>x.day==i).sort((a,c)=>(a.start||"").localeCompare(c.start||"")),t=S.tasks.filter(x=>x.day==i).sort((a,c)=>(a.time||"").localeCompare(c.time||""));
+  return `<div class="card"><h4 data-d="${i}">${d}</h4>${b.map(x=>`<div class="it" style="border-inline-start:4px solid ${esc(x.color)}">${esc(x.start)} ${esc(x.title)} ${x.done?"✅":"❌"}</div>`).join("")}${t.map(x=>`<div class="it t">${esc(x.title)} ${x.done?"✅":"❌"}</div>`).join("")||""}${b.length+t.length?"":'<div class="sub">—</div>'}</div>`}).join("")}</div>`;
+}
+function vGoals(){
+ const dn=S.tasks.filter(t=>t.done).length,all=S.tasks.length,p=all?Math.round(dn/all*100):0;
+ return `<div class="card"><b>إنجاز المهام (الأسبوع)</b><div class="pg"><i style="width:${p}%"></i></div><span class="sub">${dn} من ${all} مهمة · ${p}%</span></div><div class="bar"><b>أهدافي</b><button class="btn" data-ng>+ هدف</button></div>${S.goals.map(g=>{const q=Math.min(100,Math.round(g.cur/g.target*100));return `<div class="card"><div class="bar"><b data-g="${g.id}" style="cursor:pointer">${esc(g.title)}</b><span class="pill">${q}%</span></div><div class="pg"><i style="width:${q}%"></i></div><div class="bar"><span class="sub">${g.cur} / ${g.target} ${esc(g.unit)}</span><span><button class="btn g" data-gm="${g.id}">−</button> <button class="btn g" data-gp="${g.id}">+</button></span></div></div>`}).join("")||'<div class="empty">أضف هدفك الأول</div>'}`;
+}
+function render(){
+ $("#tabs").innerHTML=T.map(t=>`<button data-tab="${t[0]}" class="${t[0]==tab?"on":""}">${t[1]}</button>`).join("");
+ $("#days").style.display=(tab=="day"||tab=="tasks")?"flex":"none";
+ $("#days").innerHTML=D.map((d,i)=>`<button data-day="${i}" class="${i==day?"on":""}">${d}</button>`).join("");
+ const f={day:vDay,tasks:vTasks,notes:vNotes,week:vWeek,goals:vGoals};
+ $("#v").innerHTML=f[tab]();
+ const tt=S.tasks.filter(t=>t.day==day);
+ $("#sub").textContent=new Date().toLocaleDateString("ar-DZ",{weekday:"long",day:"numeric",month:"long"});
+ $("#pill").textContent=`${tt.filter(t=>t.done).length}/${tt.length} مهام اليوم`;
+}
+document.addEventListener("click",e=>{
+ const g=e.target.closest("[data-tab],[data-day],[data-a],[data-b],[data-bd],[data-td],[data-nt],[data-t],[data-n],[data-nn],[data-dn],[data-d],[data-ng],[data-g],[data-gp],[data-gm]");if(!g)return;
+ const d=g.dataset;
+ if(d.tab){tab=d.tab;render()}
+ else if(d.day!=null&&g.parentNode.id=="days"){day=+d.day;render()}
+ else if(d.a!=null){const h=pad(+d.a);editBlock({title:"",start:h+":00",end:pad(+d.a+1)+":00",color:"#6d5efc"})}
+ else if(d.td){const o=S.tasks.find(x=>x.id==d.td);o.done=!o.done;save();render()}
+ else if(d.bd){const o=S.blocks.find(x=>x.id==d.bd);o.done=!o.done;save();render()}
+ else if(d.b)editBlock(S.blocks.find(x=>x.id==d.b));
+ else if(g.hasAttribute("data-nt"))editTask({title:"",time:"",prio:"m",details:""});
+ else if(d.t)editTask(S.tasks.find(x=>x.id==d.t));
+ else if(d.n){nid=+d.n;render()}
+ else if(g.hasAttribute("data-nn")){const n={id:id(),title:"ملاحظة جديدة",body:""};S.notes.push(n);nid=n.id;save();render()}
+ else if(g.hasAttribute("data-dn")){if(confirm("هل تريد حذف الملاحظة؟")){S.notes=S.notes.filter(x=>x.id!=nid);nid=S.notes[0]?S.notes[0].id:0;save();render()}}
+ else if(d.d!=null){day=+d.d;tab="day";render()}
+ else if(g.hasAttribute("data-ng"))editGoal({title:"",target:10,cur:0,unit:""});
+ else if(d.g)editGoal(S.goals.find(x=>x.id==d.g));
+ else if(d.gp||d.gm){const o=S.goals.find(x=>x.id==(d.gp||d.gm));o.cur=Math.max(0,o.cur+(d.gp?1:-1));save();render()}
+});
+document.addEventListener("change",e=>{const c=e.target.dataset.c;if(c){S.tasks.find(x=>x.id==c).done=e.target.checked;save();render()}});
+document.addEventListener("input",e=>{
+ const n=S.notes.find(x=>x.id==nid);if(!n)return;
+ if(e.target.id=="ntt"){n.title=e.target.value;save();const b=document.querySelector(`[data-n="${nid}"]`);if(b)b.textContent=n.title||"بدون عنوان"}
+ if(e.target.id=="ntb"){n.body=e.target.value;save()}
+});
+render();
+</script>
+</body>
+</html>
